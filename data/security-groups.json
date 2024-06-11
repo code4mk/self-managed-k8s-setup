@@ -1,0 +1,108 @@
+{
+  "control_plane": {
+    "security_group_rules": [
+      {
+        "name": "allow_kubernetes_api_server",
+        "description": "Allow inbound traffic to Kubernetes API Server",
+        "protocol": "tcp",
+        "port_range": "6443",
+        "source": "0.0.0.0/0"
+      },
+      {
+        "name": "allow_etcd",
+        "description": "Allow inbound traffic to etcd",
+        "protocol": "tcp",
+        "port_range": "2379-2380",
+        "source": "0.0.0.0/0"
+      },
+      {
+        "name": "allow_kube_controller_manager",
+        "description": "Allow inbound traffic to Kube Controller Manager",
+        "protocol": "tcp",
+        "port_range": "10252",
+        "source": "0.0.0.0/0"
+      },
+      {
+        "name": "allow_kube_scheduler",
+        "description": "Allow inbound traffic to Kube Scheduler",
+        "protocol": "tcp",
+        "port_range": "10251",
+        "source": "0.0.0.0/0"
+      },
+      {
+        "name": "allow_kubelet",
+        "description": "Allow inbound traffic to Kubelet",
+        "protocol": "tcp",
+        "port_range": "10250",
+        "source": "0.0.0.0/0"
+      },
+      {
+        "name": "allow_health_check",
+        "description": "Allow inbound traffic for health checks",
+        "protocol": "tcp",
+        "port_range": "10256",
+        "source": "0.0.0.0/0"
+      },
+      {
+        "name": "allow_kubernetes_dns",
+        "description": "Allow inbound traffic to Kubernetes DNS",
+        "protocol": "tcp",
+        "port_range": "53",
+        "source": "0.0.0.0/0"
+      },
+      {
+        "name": "allow_kubernetes_dns_udp",
+        "description": "Allow inbound UDP traffic to Kubernetes DNS",
+        "protocol": "udp",
+        "port_range": "53",
+        "source": "0.0.0.0/0"
+      },
+      {
+        "name": "allow_metrics_server",
+        "description": "Allow inbound traffic to Metrics Server",
+        "protocol": "tcp",
+        "port_range": "443",
+        "source": "0.0.0.0/0"
+      }
+    ]
+  },
+  "worker_node": {
+    "security_group_rules": [
+      {
+        "name": "allow_kubelet",
+        "description": "Allow inbound traffic to Kubelet",
+        "protocol": "tcp",
+        "port_range": "10250",
+        "source": "0.0.0.0/0"
+      },
+      {
+        "name": "allow_container_runtime",
+        "description": "Allow inbound traffic to Container Runtime",
+        "protocol": "tcp",
+        "port_range": "2375",
+        "source": "0.0.0.0/0"
+      },
+      {
+        "name": "allow_kubernetes_services",
+        "description": "Allow inbound traffic to Kubernetes Services",
+        "protocol": "tcp",
+        "port_range": "30000-32767",
+        "source": "0.0.0.0/0"
+      },
+      {
+        "name": "allow_health_check",
+        "description": "Allow inbound traffic for health checks",
+        "protocol": "tcp",
+        "port_range": "10256",
+        "source": "0.0.0.0/0"
+      },
+      {
+        "name": "allow_ssh_access",
+        "description": "Allow SSH access",
+        "protocol": "tcp",
+        "port_range": "22",
+        "source": "your_ip_address/32"
+      }
+    ]
+  }
+}
