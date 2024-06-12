@@ -57,7 +57,7 @@ fi
 # Generate default containerd configuration
 print_green "Generating default containerd configuration..."
 sudo containerd config default | sudo tee /etc/containerd/config.toml
-
+ 
 # Update containerd configuration to use systemd cgroup driver
 print_green "Updating containerd configuration to use systemd cgroup driver..."
 #sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/' /etc/containerd/config.toml
