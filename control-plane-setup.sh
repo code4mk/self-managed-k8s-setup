@@ -24,7 +24,7 @@ api_server_port=6443
 
 # Initialize the Kubernetes control plane
 print_green "Initializing the Kubernetes control plane..."
-sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=$(hostname -I | awk '{print $1}')
+#sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=$(hostname -I | awk '{print $1}')
 #sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=${public_ip}
 
 # Set up kubeconfig for the root user
@@ -34,7 +34,7 @@ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 #
-sed -i "s|https://[0-9.]\+:6443|https://${public_ip}:6443|"
+sudo sed -i "s|https://[0-9.]\+:6443|https://${public_ip}:6443|" $HOME/.kube/config
 
 # Print and store the join command for worker nodes
 print_green "Printing the join command for worker nodes..."
