@@ -18,7 +18,7 @@ print_green "Running Kubernetes installation..."
 
 # Initialize the Kubernetes control plane
 print_green "Initializing the Kubernetes control plane..."
-#sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=$(hostname -I | awk '{print $1}') --upload-certs --control-plane-endpoint=193.10.1.5
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=$(hostname -I | awk '{print $1}') --upload-certs --control-plane-endpoint=193.10.1.5
 
 # Set up kubeconfig for the root user
 print_green "Setting up kubeconfig for the root user..."
