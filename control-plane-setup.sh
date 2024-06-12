@@ -8,16 +8,6 @@ print_green() {
     echo -e "\e[42m$1\e[0m"
 }
 
-# Function to print messages in red
-print_red() {
-    echo -e "\e[41m$1\e[0m"
-}
-
-# Check if script is being run with root privileges
-if [ "$EUID" -ne 0 ]; then
-    print_red "Please run this script as root"
-    exit 1
-fi
 
 # Run containerd installation
 print_green "Running containerd installation..."
