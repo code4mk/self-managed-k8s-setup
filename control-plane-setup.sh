@@ -10,11 +10,11 @@ print_green() {
 
 # Run containerd installation
 print_green "Running containerd installation..."
-./common/containerd-install.sh
+#./common/containerd-install.sh
 
 # Run Kubernetes installation
 print_green "Running Kubernetes installation..."
-./common/k8s-install.sh
+#./common/k8s-install.sh
 
 # Fetch public IP address of the VM
 public_ip=$(curl -s http://checkip.amazonaws.com)
@@ -24,14 +24,17 @@ api_server_port=6443
 
 # Initialize the Kubernetes control plane
 print_green "Initializing the Kubernetes control plane..."
-#sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=$(hostname -I | awk '{print $1}')
-sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=${public_ip}
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=$(hostname -I | awk '{print $1}')
+#sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=${public_ip}
 
 # Set up kubeconfig for the root user
 print_green "Setting up kubeconfig for the root user..."
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+#
+sed -i "s|https://[0-9.]\+:6443|https://${public_ip}:6443|"
 
 # Print and store the join command for worker nodes
 print_green "Printing the join command for worker nodes..."
