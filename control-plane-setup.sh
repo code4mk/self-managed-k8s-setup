@@ -24,7 +24,7 @@ api_server_port=6443
 
 # Initialize the Kubernetes control plane
 print_green "Initializing the Kubernetes control plane..."
-#sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=$(hostname -I | awk '{print $1}')
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=$(hostname -I | awk '{print $1}')
 #sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=${public_ip}
 
 # Set up kubeconfig for the root user
