@@ -1,11 +1,16 @@
 #!/bin/bash
 
+# Function to print messages in green
+print_green() {
+    echo -e "\e[42m$1\e[0m"
+}
+
 # Disable swap
-echo -e "\e[42mDisabling swap...\e[0m"
+print_green "Disabling swap..."
 sudo swapoff -a
 
 # Load necessary kernel modules
-echo -e "\e[42mLoading necessary kernel modules...\e[0m"
+print_green "Loading necessary kernel modules..."
 cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
 overlay
 br_netfilter
@@ -15,7 +20,7 @@ sudo modprobe overlay
 sudo modprobe br_netfilter
 
 # Set up sysctl parameters
-echo -e "\e[42mSetting up sysctl parameters...\e[0m"
+print_green "Setting up sysctl parameters..."
 cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-iptables  = 1
 net.bridge.bridge-nf-call-ip6tables = 1
@@ -23,44 +28,44 @@ net.ipv4.ip_forward                 = 1
 EOF
 
 # Apply sysctl parameters
-echo -e "\e[42mApplying sysctl parameters...\e[0m"
+print_green "Applying sysctl parameters..."
 sudo sysctl --system
 
 # Verify kernel modules are loaded
-echo -e "\e[42mVerifying kernel modules are loaded...\e[0m"
+print_green "Verifying kernel modules are loaded..."
 lsmod | grep br_netfilter
 lsmod | grep overlay
 
 # Verify sysctl parameters
-echo -e "\e[42mVerifying sysctl parameters...\e[0m"
+print_green "Verifying sysctl parameters..."
 sysctl net.bridge.bridge-nf-call-iptables net.bridge.bridge-nf-call-ip6tables net.ipv4.ip_forward
 
 # Update package index
-echo -e "\e[42mUpdating package index...\e[0m"
+print_green "Updating package index..."
 sudo apt-get update
 
 # Install containerd
-echo -e "\e[42mInstalling containerd...\e[0m"
+print_green "Installing containerd..."
 sudo apt-get -y install containerd
 
 # Check if the containerd configuration directory exists, then create if it doesn't
 if [ ! -d /etc/containerd ]; then
-    echo -e "\e[42mCreating containerd configuration directory...\e[0m"
+    print_green "Creating containerd configuration directory..."
     sudo mkdir -p /etc/containerd
 fi
 
 # Generate default containerd configuration
-echo -e "\e[42mGenerating default containerd configuration...\e[0m"
+print_green "Generating default containerd configuration..."
 sudo containerd config default | sudo tee /etc/containerd/config.toml
 
 # Update containerd configuration to use systemd cgroup driver
-echo -e "\e[42mUpdating containerd configuration to use systemd cgroup driver...\e[0m"
+print_green "Updating containerd configuration to use systemd cgroup driver..."
 sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/' /etc/containerd/config.toml
 
 # Restart containerd service
-echo -e "\e[42mRestarting containerd service...\e[0m"
+print_green "Restarting containerd service..."
 sudo systemctl restart containerd
 
 # Check containerd service status
-echo -e "\e[42mChecking containerd service status...\e[0m"
+print_green "Checking containerd service status..."
 sudo systemctl status containerd
