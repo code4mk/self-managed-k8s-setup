@@ -16,9 +16,22 @@ print_green "Running containerd installation..."
 print_green "Running Kubernetes installation..."
 ./common/k8s-install.sh
 
+
+# Fetch public IP address of the VM
+public_ip=$(curl -s http://checkip.amazonaws.com)
+
+# Specify the port for the API server
+api_server_port=6443
+
 # Initialize the Kubernetes control plane
 print_green "Initializing the Kubernetes control plane..."
-sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=$(hostname -I | awk '{print $1}')
+#sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=$(hostname -I | awk '{print $1}') --upload-certs --control-plane-endpoint=193.10.1.5
+sudo kubeadm init \
+ --pod-network-cidr=10.244.0.0/16 \
+ --apiserver-advertise-address=${public_ip} \
+ --control-plane-endpoint=${public_ip}:${api_server_port} \
+ --upload-certs
+
 
 # Set up kubeconfig for the root user
 print_green "Setting up kubeconfig for the root user..."
