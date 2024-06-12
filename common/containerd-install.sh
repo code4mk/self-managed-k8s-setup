@@ -55,7 +55,7 @@ sudo containerd config default | sudo tee /etc/containerd/config.toml
 
 # Update containerd configuration to use systemd cgroup driver
 echo -e "\e[42mUpdating containerd configuration to use systemd cgroup driver...\e[0m"
-sudo sed -i '/^\[plugins\."io\.containerd\.grpc\.v1\.cri"\.containerd\.runtimes\.runc\.options\]$/,/^\[/ s/SystemdCgroup = false/SystemdCgroup = true/g' /etc/containerd/config.toml
+sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/' /etc/containerd/config.toml
 
 # Restart containerd service
 echo -e "\e[42mRestarting containerd service...\e[0m"
