@@ -43,6 +43,12 @@ sudo apt-get update
 echo -e "\e[42mInstalling containerd...\e[0m"
 sudo apt-get -y install containerd
 
+# Check if the containerd configuration directory exists, then create if it doesn't
+if [ ! -d /etc/containerd ]; then
+    echo -e "\e[42mCreating containerd configuration directory...\e[0m"
+    sudo mkdir -p /etc/containerd
+fi
+
 # Generate default containerd configuration
 echo -e "\e[42mGenerating default containerd configuration...\e[0m"
 sudo containerd config default | sudo tee /etc/containerd/config.toml
