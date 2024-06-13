@@ -32,15 +32,32 @@ print_green "Running containerd installation..."
 print_green "Running Kubernetes installation..."
 #./common/k8s-install.sh
 
+# Fetch the private IP address of the VM
+private_ip=$(hostname -I | awk '{print $1}')
+
 # Specify the port for the API server
 api_server_port=6443
 
-export PUBLIC_IP="$public_ip"
-export API_SERVER_PORT="$api_server_port"
-export PRIVATE_IP=$(hostname -I | awk '{print $1}')
-
-# Create a temporary configuration file with the actual values
+# Create the configuration file with the actual values
 config_file="config/kubeadm-custom-config.yml"
+mkdir -p config
+cat <<EOF > $config_file
+# config/kubeadm-custom-config.yml
+apiVersion: kubeadm.k8s.io/v1beta3
+kind: ClusterConfiguration
+kubernetesVersion: stable
+controlPlaneEndpoint: "${public_ip}:${api_server_port}"
+networking:
+  podSubnet: "${pod_network_cidr}"
+apiServer:
+  certSANs:
+    - "${public_ip}"
+    - "${private_ip}"
+---
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+cgroupDriver: systemd
+EOF
 
 # Initialize the Kubernetes control plane
 print_green "Initializing the Kubernetes control plane (via: kubeadm init)..."
