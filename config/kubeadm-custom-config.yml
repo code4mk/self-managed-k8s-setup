@@ -1,8 +1,15 @@
 # kubeadm-custom-config.yml
-# kind: ClusterConfiguration
-# apiVersion: kubeadm.k8s.io/v1beta3
-# kubernetesVersion: v1.21.0
-# ---
-kind: KubeletConfiguration
+apiVersion: kubeadm.k8s.io/v1beta3
+kind: ClusterConfiguration
+kubernetesVersion: stable
+controlPlaneEndpoint: "$public_ip:$api_server_port"
+networking:
+  podSubnet: "$pod_network_cidr"
+apiServer:
+  certSANs:
+    - "$public_ip"
+    - "$private_ip"
+---
 apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
 cgroupDriver: systemd

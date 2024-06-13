@@ -38,16 +38,18 @@ private_ip=$(hostname -I | awk '{print $1}')
 # Specify the port for the API server
 api_server_port=6443
 
+# Create a temporary configuration file with the actual values
+config_file="config/kubeadm-custom-config.yml"
+
+# Update the configuration file with actual values
+sed -i "s/\$public_ip/$public_ip/g" $config_file
+sed -i "s/\$api_server_port/$api_server_port/g" $config_file
+sed -i "s/\$pod_network_cidr/$pod_network_cidr/g" $config_file
+sed -i "s/\$private_ip/$private_ip/g" $config_file
+
 # Initialize the Kubernetes control plane
 print_green "Initializing the Kubernetes control plane (via: kubeadm init)..."
-sudo kubeadm init \
- --pod-network-cidr="$pod_network_cidr" \
- --apiserver-advertise-address="$private_ip" \
- --apiserver-cert-extra-sans="$public_ip,$private_ip" \
- --control-plane-endpoint="$public_ip:$api_server_port" \
- --cri-socket="/run/containerd/containerd.sock" \
- --config="config/kubeadm-custom-config.yml" \
- --upload-certs
+sudo kubeadm init --config="$config_file" --upload-certs
 
 # Set up kubeconfig for the root user
 print_green "Setting up kubeconfig for the root user..."
