@@ -8,14 +8,6 @@ print_green() {
 # Exit on any error
 set -e
 
-# Run containerd installation
-print_green "Running containerd installation..."
-./common/containerd-install.sh
-
-# Run Kubernetes installation
-print_green "Running Kubernetes installation..."
-./common/k8s-install.sh
-
 # Prompt user for the full join command
 read -p "Enter the full join command to join the worker node to the Kubernetes cluster: " join_command
 

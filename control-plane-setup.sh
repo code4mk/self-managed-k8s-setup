@@ -24,14 +24,6 @@ if [[ -z "$pod_network_cidr" ]]; then
     exit 1
 fi
 
-# Run containerd installation
-print_green "Running containerd installation..."
-./common/containerd-install.sh
-
-# Run Kubernetes installation
-print_green "Running Kubernetes installation..."
-./common/k8s-install.sh
-
 # Fetch the private IP address of the VM
 private_ip=$(hostname -I | awk '{print $1}')
 

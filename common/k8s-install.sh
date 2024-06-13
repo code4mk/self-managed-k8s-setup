@@ -48,7 +48,3 @@ sudo systemctl enable --now kubelet
 # Check kubeadm version
 print_green "Checking kubeadm version..."
 kubeadm version
-
-# Check kubelet service status
-print_green "Checking kubelet service status..."
-sudo systemctl status kubelet
