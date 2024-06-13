@@ -5,6 +5,14 @@ print_green() {
     echo -e "\e[42m$1\e[0m"
 }
 
+# Update package lists
+print_green "Updating package lists..."
+sudo apt-get update
+
+# Install packages for HTTPS support
+print_green "Installing packages for HTTPS support..."
+sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+
 # Disable swap
 print_green "Disabling swap..."
 sudo swapoff -a
@@ -38,15 +46,13 @@ lsmod | grep overlay
 
 # Verify sysctl parameters
 print_green "Verifying sysctl parameters..."
-sysctl net.bridge.bridge-nf-call-iptables net.bridge.bridge-nf-call-ip6tables net.ipv4.ip_forward
-
-# Update package index
-print_green "Updating package index..."
-sudo apt-get update
+sysctl net.bridge.bridge-nf-call-iptables \
+      net.bridge.bridge-nf-call-ip6tables \
+      net.ipv4.ip_forward
 
 # Install containerd
 print_green "Installing containerd..."
-sudo apt-get -y install containerd
+sudo apt-get install -y containerd
 
 # Check if the containerd configuration directory exists, then create if it doesn't
 if [ ! -d /etc/containerd ]; then
@@ -56,11 +62,11 @@ fi
 
 # Generate default containerd configuration
 print_green "Generating default containerd configuration..."
-sudo containerd config default | sudo tee /etc/containerd/config.toml
- 
+containerd config default | sudo tee /etc/containerd/config.toml
+
 # Update containerd configuration to use systemd cgroup driver
 print_green "Updating containerd configuration to use systemd cgroup driver..."
-#sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/' /etc/containerd/config.toml
+sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/g' /etc/containerd/config.toml
 
 # Restart containerd service
 print_green "Restarting containerd service..."
