@@ -2,13 +2,13 @@
 apiVersion: kubeadm.k8s.io/v1beta3
 kind: ClusterConfiguration
 kubernetesVersion: stable
-controlPlaneEndpoint: "${PUBLIC_IP}:${API_SERVER_PORT}"
+controlPlaneEndpoint: "${public_ip}:${api_server_port}"
 networking:
-  podSubnet: "${POD_NETWORK_CIDR}"
+  podSubnet: "${pod_network_cidr}"
 apiServer:
   certSANs:
-    - "${PUBLIC_IP}"
-    - "${PRIVATE_IP}"
+    - "${public_ip}"
+    - "${private_ip}"
 ---
 apiVersion: kubelet.config.k8s.io/v1beta1
 kind: KubeletConfiguration
